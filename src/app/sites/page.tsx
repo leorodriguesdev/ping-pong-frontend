@@ -64,17 +64,31 @@ export default async function HomePage() {
 
 // Componente para exibir o status com cor
 function StatusBadge({ status }: { status: string }) {
-  let colorClasses = "bg-gray-300 text-gray-800"; // default
-
-  if (status === "online") {
-    colorClasses = "bg-green-100 text-green-800";
-  } else if (status === "offline") {
-    colorClasses = "bg-red-100 text-red-800";
+    if (status === "online") {
+      return (
+        <span className="inline-block px-2 py-1 text-sm rounded bg-green-100 text-green-800 font-semibold">
+          ONLINE
+        </span>
+      );
+    }
+    // Se estiver offline:
+    return (
+      <span className="inline-flex items-center px-2 py-1 text-sm rounded bg-red-100 text-red-800 font-semibold">
+        <svg
+          className="w-4 h-4 mr-1 animate-pulse"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4m0 4h.01"
+          />
+        </svg>
+        OFFLINE
+      </span>
+    );
   }
-
-  return (
-    <span className={`px-2 py-1 text-sm font-semibold rounded ${colorClasses}`}>
-      {status.toUpperCase()}
-    </span>
-  );
-}
+  
