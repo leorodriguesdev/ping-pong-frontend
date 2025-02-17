@@ -1,3 +1,4 @@
+// src/app/sites/new/page.tsx
 "use client";
 
 import { FormEvent, useState } from "react";
@@ -19,12 +20,7 @@ export default function NewSitePage() {
         },
         body: JSON.stringify({ name, url }),
       });
-
-      if (!res.ok) {
-        throw new Error("Erro ao criar site");
-      }
-
-      // Se der certo, redireciona para a lista
+      if (!res.ok) throw new Error("Erro ao criar site");
       router.push("/sites");
     } catch (err) {
       console.error(err);
@@ -33,8 +29,7 @@ export default function NewSitePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
-        {/* Link de voltar */}
+      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
         <div className="mb-4">
           <Link
             href="/sites"
@@ -43,22 +38,17 @@ export default function NewSitePage() {
             ← Voltar
           </Link>
         </div>
-
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+        <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-6 text-center">
           Cadastrar Novo Site
         </h1>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label
-              htmlFor="siteName"
-              className="block mb-1 font-semibold text-gray-700 dark:text-gray-200"
-            >
-              Nome do Site:
+            <label className="block text-lg font-medium text-gray-700 dark:text-gray-200 mb-1">
+              Nome do Site
             </label>
             <input
               id="siteName"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               type="text"
               placeholder="Ex: Meu Site"
               value={name}
@@ -66,17 +56,13 @@ export default function NewSitePage() {
               required
             />
           </div>
-
           <div>
-            <label
-              htmlFor="siteUrl"
-              className="block mb-1 font-semibold text-gray-700 dark:text-gray-200"
-            >
-              URL:
+            <label className="block text-lg font-medium text-gray-700 dark:text-gray-200 mb-1">
+              URL
             </label>
             <input
               id="siteUrl"
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               type="url"
               placeholder="Ex: https://exemplo.com"
               value={url}
@@ -84,10 +70,9 @@ export default function NewSitePage() {
               required
             />
           </div>
-
           <button
             type="submit"
-            className="w-full mt-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 dark:hover:bg-blue-500 transition-colors"
+            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
           >
             Salvar
           </button>
