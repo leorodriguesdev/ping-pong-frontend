@@ -4,14 +4,24 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 
 export default function NewSitePage() {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // Função auxiliar para simular um delay
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setLoading(true);
+    // Exibe um toast de loading
+    const toastId = toast.loading("Cadastrando site...");
+    // Simula um delay de 3 segundos
+    await delay(3000);
     try {
       const res = await fetch("http://127.0.0.1:8000/site/", {
         method: "POST",
@@ -21,9 +31,13 @@ export default function NewSitePage() {
         body: JSON.stringify({ name, url }),
       });
       if (!res.ok) throw new Error("Erro ao criar site");
+      toast.success("Site cadastrado com sucesso!", { id: toastId });
       router.push("/sites");
     } catch (err) {
       console.error(err);
+      toast.error("Erro ao criar site", { id: toastId });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -48,12 +62,13 @@ export default function NewSitePage() {
             </label>
             <input
               id="siteName"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               type="text"
               placeholder="Ex: Meu Site"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              disabled={loading}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
           <div>
@@ -62,19 +77,21 @@ export default function NewSitePage() {
             </label>
             <input
               id="siteUrl"
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               type="url"
               placeholder="Ex: https://exemplo.com"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
+              disabled={loading}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            disabled={loading}
+            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Salvar
+            {loading ? "Cadastrando..." : "Salvar"}
           </button>
         </form>
       </div>

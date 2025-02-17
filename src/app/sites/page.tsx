@@ -28,7 +28,7 @@ export default function SitesPage() {
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-100 to-gray-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-10">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-8">
-          Monitor de Sites
+          Sites Cadastrados
         </h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {sites.map((site) => (

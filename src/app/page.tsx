@@ -9,23 +9,20 @@ export default function HomePage() {
   const { user } = useGlobalContext();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:to-gray-800 py-20 px-4 sm:px-8">
+    <div className="min-h-screen text-center bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-gray-900 dark:to-gray-800 py-20 px-4 sm:px-8">
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-4xl sm:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-6">
           Bem-vindo ao Monitor de Sites
         </h1>
         <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
           Gerencie o status dos seus sites favoritos. Monitore performance, veja históricos
-          de requisições e alterne entre tema claro e escuro.
+          de requisições.
         </p>
         {user && (
           <p className="mb-6 text-gray-700 dark:text-gray-300">
             Você está logado como <strong>{user.name}</strong>.
           </p>
         )}
-        <div className="mb-10 flex justify-center">
-          <ThemeSwitcher />
-        </div>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
             href="/sites"
@@ -59,6 +56,9 @@ export default function HomePage() {
           </p>
         </div>
       </div>
+      <p className="mb-6 text-gray-700 dark:text-gray-300 italic pt-5">
+            Simples e direto ao ponto!
+          </p>
     </div>
   );
 }
