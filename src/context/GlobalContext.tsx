@@ -12,7 +12,6 @@ import {
 import { Toaster, toast } from "react-hot-toast";
 import axiosClient from "@/api/axiosClient";
 
-// Tipos para o usuário e para os sites
 interface User {
   name: string;
 }
@@ -28,6 +27,7 @@ interface GlobalContextProps {
   user: User | null;
   theme: "light" | "dark";
   healthOk: boolean;
+  lastHealthCheck: number; // timestamp (ms) da última verificação
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
   toggleTheme: () => void;
@@ -41,6 +41,7 @@ const GlobalContext = createContext<GlobalContextProps>({
   user: null,
   theme: "light",
   healthOk: false,
+  lastHealthCheck: Date.now(),
   login: async () => false,
   logout: () => {},
   toggleTheme: () => {},
@@ -54,9 +55,9 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [healthOk, setHealthOk] = useState(false);
+  const [lastHealthCheck, setLastHealthCheck] = useState<number>(Date.now());
   const [sites, setSites] = useState<Site[]>([]);
 
-  // Função getSites definida com useCallback para estabilidade
   const getSites = useCallback(async (): Promise<Site[]> => {
     try {
       const response = await axiosClient.get("/site/");
@@ -69,6 +70,19 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  // Função que verifica a saúde da API e atualiza o timestamp
+  async function fetchHealth() {
+    try {
+      const response = await axiosClient.get("/health/");
+      setHealthOk(response.status === 200);
+      setLastHealthCheck(Date.now());
+    } catch (err) {
+      console.error(err);
+      setHealthOk(false);
+      setLastHealthCheck(Date.now());
+    }
+  }
+
   useEffect(() => {
     // Carrega tema e usuário do localStorage
     const storedTheme = localStorage.getItem("app-theme") as "light" | "dark" | null;
@@ -80,8 +94,10 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-    // Verifica a saúde da API ao carregar
+    // Verifica a saúde da API no primeiro load e a cada 10 segundos
     fetchHealth();
+    const healthInterval = setInterval(fetchHealth, 10000);
+    return () => clearInterval(healthInterval);
   }, []);
 
   async function login(username: string, password: string) {
@@ -118,22 +134,13 @@ export function GlobalContextProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function fetchHealth() {
-    try {
-      const response = await axiosClient.get("/health/");
-      setHealthOk(response.status === 200);
-    } catch (err) {
-      console.error(err);
-      setHealthOk(false);
-    }
-  }
-
   return (
     <GlobalContext.Provider
       value={{
         user,
         theme,
         healthOk,
+        lastHealthCheck,
         login,
         logout,
         toggleTheme,

@@ -17,15 +17,15 @@ export default function ThemeSwitcher() {
   return (
     <button
       onClick={toggleTheme}
-      className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      className="flex items-center gap-2 px-4 py-2 border rounded-full border-gray-300 dark:border-gray-700 rounded text-sm hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
     >
       {theme === "light" ? (
         <>
-          <span role="img" aria-label="Sol">☀️</span> Tema Claro
+          <span role="img" aria-label="Sol">🌙</span>
         </>
       ) : (
         <>
-          <span role="img" aria-label="Lua">🌙</span> Tema Escuro
+          <span role="img" aria-label="Lua">☀️</span>
         </>
       )}
     </button>
